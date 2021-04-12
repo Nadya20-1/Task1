@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -34,6 +35,64 @@ namespace Task1
             }
         }
 
+        public static DataTable readCSV(string filePath)
+        {
+            var dataTable = new DataTable();
+            using (TextFieldParser csvReader = new TextFieldParser(filePath))
+            {
+                csvReader.SetDelimiters(new string[] { ";" });
+                csvReader.HasFieldsEnclosedInQuotes = true;
+                string[] colFields = csvReader.ReadFields();
+
+                DataColumn datecolumnDate = new DataColumn("Date");
+                datecolumnDate.AllowDBNull = true;
+                dataTable.Columns.Add(datecolumnDate);
+                DataColumn datecolumnName = new DataColumn("FirstName");
+                datecolumnName.AllowDBNull = true;
+                dataTable.Columns.Add(datecolumnName);
+                DataColumn datecolumnSName = new DataColumn("LastName");
+                datecolumnSName.AllowDBNull = true;
+                dataTable.Columns.Add(datecolumnSName);
+                DataColumn datecolumnMName = new DataColumn("MiddleName");
+                datecolumnMName.AllowDBNull = true;
+                dataTable.Columns.Add(datecolumnMName);
+                DataColumn datecolumnCity = new DataColumn("City");
+                datecolumnCity.AllowDBNull = true;
+                dataTable.Columns.Add(datecolumnCity);
+                DataColumn datecolumnCountry = new DataColumn("Country");
+                datecolumnCountry.AllowDBNull = true;
+                dataTable.Columns.Add(datecolumnCountry);
+            }
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding win1251 = Encoding.GetEncoding(1251);
+
+            File.ReadLines(filePath, win1251).Skip(1)
+                .Select(x => x.Split(';'))
+                .ToList()
+                .ForEach(line => dataTable.Rows.Add(line));
+            return dataTable;
+        }
+
+        public static bool readCSVandSave2DB(string filePath)
+        {
+            DataTable csv = new DataTable();
+
+            try
+            {
+                csv = readCSV(filePath);
+                if (!ReadCSVToDatabase(csv)) return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception " + ex);
+                return false;
+            }
+            MessageBox.Show("Data has been imported to Database!");
+            return true;
+
+        }
+
         static public bool ReadCSVToDatabase(DataTable csvData)
         {
             try
@@ -61,65 +120,65 @@ namespace Task1
             return true;
         }
 
-        public static int readCSVandSave2DB(string path)
-        {
-            int csvBufferSize = 9000;
-            DataTable csvData = new DataTable();
-            try
-            {
-                using (TextFieldParser csvReader = new TextFieldParser(path))
-                {
-                    csvReader.SetDelimiters(new string[] { ";" });
-                    csvReader.HasFieldsEnclosedInQuotes = true;
-                    string[] colFields = csvReader.ReadFields();
+        //public static int readCSVandSave2DataBase(string path)
+        //{
+        //    int csvBufferSize = 9000;
+        //    DataTable csvData = new DataTable();
+        //    try
+        //    {
+        //        using (TextFieldParser csvReader = new TextFieldParser(path))
+        //        {
+        //            csvReader.SetDelimiters(new string[] { ";" });
+        //            csvReader.HasFieldsEnclosedInQuotes = true;
+        //            string[] colFields = csvReader.ReadFields();
 
-                    DataColumn datecolumnDate = new DataColumn("Date");
-                    datecolumnDate.AllowDBNull = true;
-                    csvData.Columns.Add(datecolumnDate);
-                    DataColumn datecolumnName = new DataColumn("FirstName");
-                    datecolumnName.AllowDBNull = true;
-                    csvData.Columns.Add(datecolumnName);
-                    DataColumn datecolumnSName = new DataColumn("LastName");
-                    datecolumnSName.AllowDBNull = true;
-                    csvData.Columns.Add(datecolumnSName);
-                    DataColumn datecolumnMName = new DataColumn("MiddleName");
-                    datecolumnMName.AllowDBNull = true;
-                    csvData.Columns.Add(datecolumnMName);
-                    DataColumn datecolumnCity = new DataColumn("City");
-                    datecolumnCity.AllowDBNull = true;
-                    csvData.Columns.Add(datecolumnCity);
-                    DataColumn datecolumnCountry = new DataColumn("Country");
-                    datecolumnCountry.AllowDBNull = true;
-                    csvData.Columns.Add(datecolumnCountry);
+        //            DataColumn datecolumnDate = new DataColumn("Date");
+        //            datecolumnDate.AllowDBNull = true;
+        //            csvData.Columns.Add(datecolumnDate);
+        //            DataColumn datecolumnName = new DataColumn("FirstName");
+        //            datecolumnName.AllowDBNull = true;
+        //            csvData.Columns.Add(datecolumnName);
+        //            DataColumn datecolumnSName = new DataColumn("LastName");
+        //            datecolumnSName.AllowDBNull = true;
+        //            csvData.Columns.Add(datecolumnSName);
+        //            DataColumn datecolumnMName = new DataColumn("MiddleName");
+        //            datecolumnMName.AllowDBNull = true;
+        //            csvData.Columns.Add(datecolumnMName);
+        //            DataColumn datecolumnCity = new DataColumn("City");
+        //            datecolumnCity.AllowDBNull = true;
+        //            csvData.Columns.Add(datecolumnCity);
+        //            DataColumn datecolumnCountry = new DataColumn("Country");
+        //            datecolumnCountry.AllowDBNull = true;
+        //            csvData.Columns.Add(datecolumnCountry);
 
-                    int buffer = 0;
-                    while (!csvReader.EndOfData)
-                    {
-                        string[] fieldData = csvReader.ReadFields();
-                        csvData.Rows.Add(fieldData);
+        //            int buffer = 0;
+        //            while (!csvReader.EndOfData)
+        //            {
+        //                string[] fieldData = csvReader.ReadFields();
+        //                csvData.Rows.Add(fieldData);
 
-                        buffer++;
-                        if (buffer == csvBufferSize)
-                        {
-                            buffer = 0;
+        //                buffer++;
+        //                if (buffer == csvBufferSize)
+        //                {
+        //                    buffer = 0;
 
-                            if (!ReadCSVToDatabase(csvData)) return 1;
+        //                    if (!ReadCSVToDatabase(csvData)) return 1;
 
-                            csvData.Rows.Clear();
-                        }
-                    }
+        //                    csvData.Rows.Clear();
+        //                }
+        //            }
 
-                    if (buffer != 0)
-                    {
-                        if (!ReadCSVToDatabase(csvData)) return 1;
-                        csvData.Rows.Clear();
-                    }
-                    MessageBox.Show("Data has been imported to Database!");
-                }
-            }
-            catch { return 2; }
-            return 0;
-        }
+        //            if (buffer != 0)
+        //            {
+        //                if (!ReadCSVToDatabase(csvData)) return 1;
+        //                csvData.Rows.Clear();
+        //            }
+        //            MessageBox.Show("Data has been imported to Database!");
+        //        }
+        //    }
+        //    catch { return 2; }
+        //    return 0;
+        //}
     }
 
         public class PeopleClassMap : ClassMap<People>
