@@ -58,9 +58,9 @@ namespace Task1.ViewModel
                 dialog.Filter = "Csv file (*.csv)|*.csv";
                 MainWindow.Instance.file_text.Text = dialog.FileName;
 
-                //OpenFile.readCSVandSave2DB(dialog.FileName);
+                OpenFile.readCSVandSave2DB(dialog.FileName);
                
-                MainWindow.Instance.data_view.ItemsSource = OpenFile.ReadCSVFile(dialog.FileName);
+                //MainWindow.Instance.data_view.ItemsSource = OpenFile.ReadCSVFile(dialog.FileName);
         }
 
         public static DataTable ToDataTable<T>(List<T> items)

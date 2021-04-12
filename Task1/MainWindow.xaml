@@ -38,7 +38,7 @@
         <Button x:Name="btn_xml" Content="Export To XML" HorizontalAlignment="Left" Margin="580,383,0,0" Command="{Binding ExportToXML}" VerticalAlignment="Top" Width="95" Height="22"/>
 
 
-        <Button Content="Load to Database" HorizontalAlignment="Left" Margin="566,9,0,0" Command="{Binding LoadToDatabase}" VerticalAlignment="Top" Width="110"/>
+        <!--<Button Content="Load to Database" HorizontalAlignment="Left" Margin="566,9,0,0" Command="{Binding LoadToDatabase}" VerticalAlignment="Top" Width="110"/>-->
 
 
     </Grid>

@@ -73,22 +73,22 @@ namespace Task1
                     csvReader.HasFieldsEnclosedInQuotes = true;
                     string[] colFields = csvReader.ReadFields();
 
-                    DataColumn datecolumnDate = new DataColumn("date");
+                    DataColumn datecolumnDate = new DataColumn("Date");
                     datecolumnDate.AllowDBNull = true;
                     csvData.Columns.Add(datecolumnDate);
-                    DataColumn datecolumnName = new DataColumn("first_name");
+                    DataColumn datecolumnName = new DataColumn("FirstName");
                     datecolumnName.AllowDBNull = true;
                     csvData.Columns.Add(datecolumnName);
-                    DataColumn datecolumnSName = new DataColumn("last_name");
+                    DataColumn datecolumnSName = new DataColumn("LastName");
                     datecolumnSName.AllowDBNull = true;
                     csvData.Columns.Add(datecolumnSName);
-                    DataColumn datecolumnMName = new DataColumn("middle_name");
+                    DataColumn datecolumnMName = new DataColumn("MiddleName");
                     datecolumnMName.AllowDBNull = true;
                     csvData.Columns.Add(datecolumnMName);
-                    DataColumn datecolumnCity = new DataColumn("city");
+                    DataColumn datecolumnCity = new DataColumn("City");
                     datecolumnCity.AllowDBNull = true;
                     csvData.Columns.Add(datecolumnCity);
-                    DataColumn datecolumnCountry = new DataColumn("country");
+                    DataColumn datecolumnCountry = new DataColumn("Country");
                     datecolumnCountry.AllowDBNull = true;
                     csvData.Columns.Add(datecolumnCountry);
 
