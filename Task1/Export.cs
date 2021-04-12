@@ -46,7 +46,6 @@ namespace Task1
                                 excelApplication.Cells[i, j] = dataTable.Rows[i - 2][j - 1].ToString();
                         }
                     }
-
                     excelApplication.ActiveWorkbook.SaveCopyAs(path);
                     excelApplication.ActiveWorkbook.Saved = true;
 
