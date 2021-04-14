@@ -15,19 +15,73 @@ using System.IO;
 using System.Reflection;
 using ClosedXML.Excel;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace Task1.ViewModel
 {
     public class ApplicationViewModel : INotifyPropertyChanged
     {
     
-        private static PeopleContext DataBase;
-
+        private static PeopleContext database;
+       
         public ApplicationViewModel()
         {
-          
-             
+            database = new PeopleContext();
+            Population = database.DbPeople.Local;
         }
+
+        public static ObservableCollection<People> Population { get; set; }
+
+        private static DateTime date;
+        public static string DateText
+        {
+            get
+            {
+                if (date != DateTime.MinValue)
+                    return date.ToShortDateString();
+                return string.Empty;
+            }
+            set
+            {
+                date = DateTime.Parse(value);
+            }
+        }
+        public static string FirstNameText { get; set; }
+        public static string LastNameText { get; set; }
+        public static string MiddleNameText { get; set; }
+        public static string CityText { get; set; }
+        public static string CountryText { get; set; }
+
+        private static List<People> Parameters()
+        {
+            List<People> people = Population.ToList();
+            if (date != DateTime.MinValue)
+            {
+                people = people.Where(p => p.Date == date.ToShortDateString()).Select(p => p).ToList();
+            }
+            if (FirstNameText != string.Empty && FirstNameText != null)
+            {
+                people = people.Where(p => p.FirstName == FirstNameText).Select(p => p).ToList();
+            }
+            if (LastNameText != string.Empty && LastNameText != null)
+            {
+                people = people.Where(p => p.LastName == LastNameText).Select(p => p).ToList();
+            }
+            if (MiddleNameText != string.Empty && MiddleNameText != null)
+            {
+                people = people.Where(p => p.MiddleName == MiddleNameText).Select(p => p).ToList();
+            }
+            if (CityText != string.Empty && CityText != null)
+            {
+                people = people.Where(p => p.City == CityText).Select(p => p).ToList();
+            }
+            if (CountryText != string.Empty && CountryText != null)
+            {
+                people = people.Where(p => p.Country == CountryText).Select(p => p).ToList();
+            }
+            return people;
+        }
+
 
         public static void XML()
         {
@@ -47,18 +101,37 @@ namespace Task1.ViewModel
 
             if (dialog.ShowDialog() == true)
             {
-                Export.ExportToExcel(dialog.FileName);
+               Export.ExportToExcel(dialog.FileName);
             }
         }
 
-        public static void Text()
+        public static void OpenCSV(string path)
+        {
+            List<People> a = OpenFile.ReadCSVFile(path)?.ToList();
+            if (a != null)
+                foreach (var item in a)
+                {
+                    SQLRepository<People> rp = new SQLRepository<People>(new PeopleContext());
+                    rp.Create(item);
+                }
+            MessageBox.Show("Data has been imported to Database!");
+        }
+
+        public static void ReadCSVandSendDataToSQL()
             {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.ShowDialog();
                 dialog.Filter = "Csv file (*.csv)|*.csv";
+
                 MainWindow.Instance.file_text.Text = dialog.FileName;
 
-                OpenFile.readCSVandSave2DB(dialog.FileName);
+                if (dialog.FileName == "")
+                {
+                    return;
+                }
+
+                 AsyncReadCSVandSave2DB(dialog.FileName);
+                //SendDataToSQL();
                
                 //MainWindow.Instance.data_view.ItemsSource = OpenFile.ReadCSVFile(dialog.FileName);
         }
@@ -100,7 +173,7 @@ namespace Task1.ViewModel
             }
         }
 
-        public RelayCommand SelectFile => new RelayCommand(obj => Text());
+        public RelayCommand SelectFile => new RelayCommand(obj => ReadCSVandSendDataToSQL());
 
         public RelayCommand LoadToDatabase => new RelayCommand(obj => SendDataToSQL());
 
@@ -108,7 +181,11 @@ namespace Task1.ViewModel
 
         public RelayCommand ExportToXML => new RelayCommand(obj => XML());
 
- 
+        public static async void AsyncReadCSVandSave2DB(string path)
+        {
+            await Task.Run(() => OpenCSV(path));
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

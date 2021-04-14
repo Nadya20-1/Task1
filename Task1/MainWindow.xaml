@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="470" Width="697">
-    <Grid>
-        <TextBox x:Name="file_text" HorizontalAlignment="Left" Margin="71,11,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="296" IsEnabled="False"/>
-        <Button x:Name="btn_select" Content="Select" HorizontalAlignment="Left" Margin="382,9,0,0" Command="{Binding SelectFile}" VerticalAlignment="Top" RenderTransformOrigin="0.384,-0.614" Width="69"/>
-        <DataGrid x:Name="data_view" AutoGenerateColumns="False" Margin="0,53,0,144" SelectedIndex="0" >
+        Title="MainWindow" Height="500" Width="710">
+    <Grid  Height="470" Width="697">
+        <TextBox x:Name="file_text" HorizontalAlignment="Left" Margin="71,11,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="296" IsEnabled="False" Height="20"/>
+        <Button x:Name="btn_select" Content="Select File" HorizontalAlignment="Left" Margin="391,11,0,0" Command="{Binding SelectFile}" VerticalAlignment="Top" RenderTransformOrigin="0.384,-0.614" Width="75"/>
+        <DataGrid x:Name="data_view" AutoGenerateColumns="False" Margin="0,53,0,164" SelectedIndex="0"  ItemsSource="{Binding Population}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Date}" Header="Date" IsReadOnly="True" Width="80" ClipboardContentBinding="{Binding}" DisplayIndex="0"/>
                 <DataGridTextColumn Binding="{Binding FirstName}" Header="FirstName" IsReadOnly="True"  Width="70"  ClipboardContentBinding="{Binding}" DisplayIndex="1"/>
@@ -19,12 +19,12 @@
                 <DataGridTextColumn Binding="{Binding Country}" Header="Country" Width="70" IsReadOnly="True" ClipboardContentBinding="{Binding}" DisplayIndex="5"/>
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox x:Name="data_text" HorizontalAlignment="Left" Margin="81,318,0,0"  TextWrapping="Wrap" Width="138" Height="23" VerticalAlignment="Top"/>
-        <TextBox x:Name="lastname_text" HorizontalAlignment="Left" Margin="81,412,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23"/>
-        <TextBox x:Name="city_text" HorizontalAlignment="Left" Margin="355,368,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="22"/>
-        <TextBox x:Name="firstname_text" HorizontalAlignment="Left" Margin="81,368,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="22"/>
-        <TextBox x:Name="country_text" HorizontalAlignment="Left" Margin="355,412,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
-        <TextBox x:Name="middlename_text" HorizontalAlignment="Left" Margin="355,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
+        <TextBox x:Name="date_text" HorizontalAlignment="Left" Margin="81,318,0,0"  Text="{Binding DateText}" TextWrapping="Wrap" Width="138" Height="23" VerticalAlignment="Top"/>
+        <TextBox x:Name="lastname_text" HorizontalAlignment="Left" Margin="81,412,0,0" Text="{Binding LastNameText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23"/>
+        <TextBox x:Name="city_text" HorizontalAlignment="Left" Margin="355,368,0,0"  Text="{Binding CityText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="22"/>
+        <TextBox x:Name="firstname_text" HorizontalAlignment="Left" Margin="81,368,0,0"  Text="{Binding FirstNameText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="22"/>
+        <TextBox x:Name="country_text" HorizontalAlignment="Left" Margin="355,412,0,0" Text="{Binding CountryText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
+        <TextBox x:Name="middlename_text" HorizontalAlignment="Left" Margin="355,318,0,0" Text="{Binding MiddleNameText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
 
         <Label Content="Date" HorizontalAlignment="Left" Margin="10,317,0,0" VerticalAlignment="Top" Height="27" Width="47"/>
         <Label Content="First Name" HorizontalAlignment="Left" Margin="8,365,0,0" VerticalAlignment="Top" Height="24"/>

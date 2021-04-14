@@ -35,7 +35,7 @@ namespace Task1
             }
         }
 
-        public static DataTable readCSV(string filePath)
+        public static DataTable ReadCSV(string filePath)
         {
             var dataTable = new DataTable();
             using (TextFieldParser csvReader = new TextFieldParser(filePath))
@@ -74,23 +74,21 @@ namespace Task1
             return dataTable;
         }
 
-        public static bool readCSVandSave2DB(string filePath)
+        public static bool ReadCSVandSave2DB(string filePath)
         {
             DataTable csv = new DataTable();
 
             try
             {
-                csv = readCSV(filePath);
+                csv = ReadCSV(filePath);
                 if (!ReadCSVToDatabase(csv)) return false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Exception " + ex);
                 return false;
-            }
-            MessageBox.Show("Data has been imported to Database!");
+            } 
             return true;
-
         }
 
         static public bool ReadCSVToDatabase(DataTable csvData)
@@ -117,6 +115,7 @@ namespace Task1
                 MessageBox.Show("Exception " + ex);
                 return false;
             }
+            MessageBox.Show("Data has been imported to Database!");
             return true;
         }
 
@@ -182,15 +181,15 @@ namespace Task1
     }
 
         public class PeopleClassMap : ClassMap<People>
-    {
-        public PeopleClassMap()
         {
-            Map(item => item.Date).Index(0);
-            Map(item => item.FirstName).Index(1);
-            Map(item => item.LastName).Index(2);
-            Map(item => item.MiddleName).Index(3);
-            Map(item => item.City).Index(4);
-            Map(item => item.Country).Index(5);
+             public PeopleClassMap()
+             {
+                 Map(item => item.Date).Index(0);
+                 Map(item => item.FirstName).Index(1);
+                 Map(item => item.LastName).Index(2);
+                 Map(item => item.MiddleName).Index(3);
+                 Map(item => item.City).Index(4);
+                 Map(item => item.Country).Index(5);
+              }
         }
-    }
 }

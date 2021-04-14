@@ -1,15 +1,21 @@
 ﻿using ClosedXML.Excel;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.Win32;
 using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
 using System.Data.Odbc;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Task1
 {
@@ -22,29 +28,35 @@ namespace Task1
                 try
                 {
                     dbConnection.Open();
-                    SqlCommand command = new SqlCommand("SELECT * FROM People", dbConnection);
+                    DataContext db = new DataContext(dbConnection);
 
-                    string query = "SELECT * FROM People WHERE Date = '" + MainWindow.Instance.data_text.Text + "' OR FirstName = N'" + MainWindow.Instance.firstname_text.Text + "' OR LastName = N'" + MainWindow.Instance.lastname_text.Text + "' OR MiddleName = N'" + MainWindow.Instance.middlename_text.Text + "' OR City = N'" + MainWindow.Instance.city_text.Text + "' OR Country = N'" + MainWindow.Instance.country_text.Text + "' ";
-
-                    SqlCommand data_sampling = new SqlCommand(query, dbConnection);
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(data_sampling);
-
-                    dataAdapter.Fill(dataTable);
+                    var query = db.GetTable<People>()
+                                     .WhereIfRightIsNotDefault(p => p.Date == MainWindow.Instance.date_text.Text)
+                                     .WhereIfRightIsNotDefault(p => p.FirstName == MainWindow.Instance.firstname_text.Text.ToUpper())
+                                     .WhereIfRightIsNotDefault(p => p.LastName == MainWindow.Instance.lastname_text.Text.ToUpper())
+                                     .WhereIfRightIsNotDefault(p => p.MiddleName == MainWindow.Instance.middlename_text.Text.ToUpper())
+                                     .WhereIfRightIsNotDefault(p => p.City == MainWindow.Instance.city_text.Text.ToUpper())
+                                     .WhereIfRightIsNotDefault(p => p.Country == MainWindow.Instance.country_text.Text.ToUpper()).ToList();
 
                     var excelApplication = new Microsoft.Office.Interop.Excel.Application();
                     var excelWorkBook = excelApplication.Application.Workbooks.Add(Type.Missing);
 
-                    DataColumnCollection dataColumnCollection = dataTable.Columns;
-
-                    for (int i = 1; i <= dataTable.Rows.Count + 1; i++)
+                    excelApplication.Cells[1, 1] = "Date";
+                    excelApplication.Cells[1, 2] = "FirstName";
+                    excelApplication.Cells[1, 3] = "LastName";
+                    excelApplication.Cells[1, 4] = "MiddleName";
+                    excelApplication.Cells[1, 5] = "City";
+                    excelApplication.Cells[1, 6] = "Country";
+                    int i = 2;
+                    foreach (People q in query)
                     {
-                        for (int j = 1; j <= dataTable.Columns.Count; j++)
-                        {
-                            if (i == 1)
-                                excelApplication.Cells[i, j] = dataColumnCollection[j - 1].ToString();
-                            else
-                                excelApplication.Cells[i, j] = dataTable.Rows[i - 2][j - 1].ToString();
-                        }
+                        excelApplication.Cells[i, 1] = q.Date.ToString();
+                        excelApplication.Cells[i, 2] = q.FirstName.ToString();
+                        excelApplication.Cells[i, 3] = q.LastName.ToString();
+                        excelApplication.Cells[i, 4] = q.MiddleName.ToString();
+                        excelApplication.Cells[i, 5] = q.City.ToString();
+                        excelApplication.Cells[i, 6] = q.Country.ToString();
+                        i++;
                     }
 
                     excelApplication.ActiveWorkbook.SaveCopyAs(path);
@@ -57,9 +69,9 @@ namespace Task1
                 }
 
                 catch (Exception ex)
-            {
-                MessageBox.Show("Exception " + ex);
-            }
+                {
+                    MessageBox.Show("Exception " + ex);
+                }
         }
 
         public static void ExportToXML(string path)
@@ -68,20 +80,28 @@ namespace Task1
             {
                 using (SqlConnection dbConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Population;Integrated Security=True;"))
                 {
-                    string CmdString = "SELECT * FROM People";
-
-                    string query = "SELECT * FROM People WHERE Date = '" + MainWindow.Instance.data_text.Text + "' OR FirstName = N'" + MainWindow.Instance.firstname_text.Text + "' OR LastName = N'" + MainWindow.Instance.lastname_text.Text + "' OR MiddleName = N'" + MainWindow.Instance.middlename_text.Text + "' OR City = N'" + MainWindow.Instance.city_text.Text + "' OR Country = N'" + MainWindow.Instance.country_text.Text + "' ";
-
-                    SqlCommand data_sampling = new SqlCommand(query, dbConnection);
-
-                    SqlCommand command = new SqlCommand(CmdString, dbConnection);
+                    DataContext db = new DataContext(dbConnection);
                     dbConnection.Open();
-                    DataTable dataTable = new DataTable("People");
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(data_sampling);
-                    dataAdapter.Fill(dataTable);
-                    dataTable.WriteXml(path);
-                    dbConnection.Close();
 
+                    var query = db.GetTable<People>()
+                                   .WhereIfRightIsNotDefault(p => p.Date == MainWindow.Instance.date_text.Text)
+                                   .WhereIfRightIsNotDefault(p => p.FirstName == MainWindow.Instance.firstname_text.Text.ToUpper())
+                                   .WhereIfRightIsNotDefault(p => p.LastName == MainWindow.Instance.lastname_text.Text.ToUpper())
+                                   .WhereIfRightIsNotDefault(p => p.MiddleName == MainWindow.Instance.middlename_text.Text.ToUpper())
+                                   .WhereIfRightIsNotDefault(p => p.City == MainWindow.Instance.city_text.Text.ToUpper())
+                                   .WhereIfRightIsNotDefault(p => p.Country == MainWindow.Instance.country_text.Text.ToUpper()).ToList();
+
+                    XElement elements = new XElement("TestProgram",
+                          query.Select(item => new XElement("Record",
+                                      new XAttribute("Id", item.Id),
+                                      new XElement("Date", item.Date),
+                                      new XElement("FirstName", item.FirstName),
+                                      new XElement("LastName", item.LastName),
+                                      new XElement("MiddleName", item.MiddleName),
+                                      new XElement("City", item.City),
+                                      new XElement("Country", item.Country))));
+                    elements.Save(path);
+                    dbConnection.Close();
                 }
                 MessageBox.Show("Data has been exported to XML!");
             }
@@ -90,6 +110,5 @@ namespace Task1
                 MessageBox.Show("Exception " + ex);
             }
         }
-
     }
 }

@@ -34,6 +34,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Mindbox.Data.Linq" Version="3.0.5" />
     <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="19.1.0.55" />
     <PackageReference Include="System.Data.Odbc" Version="5.0.0" />
   </ItemGroup>

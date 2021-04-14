@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Windows;
 using CsvHelper.Configuration.Attributes;
+using System.Data.Linq.Mapping;
 
 namespace Task1
 {
+    [Table(Name = "People")]
     public partial class People
     {
         private DateTime date;
 
-        [Name("id")]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true)]
         public int Id { get; set; }
-        [Name("date_time")]
+
+        [Column(Name = "Date")]
         public string Date
         {
             get
@@ -24,15 +27,20 @@ namespace Task1
                 date = DateTime.Parse(value);
             }
         }
-        [Name("first_name")]
+
+        [Column(Name = "FirstName")]
         public string FirstName { get; set; }
-        [Name("last_name")]
+
+        [Column(Name = "LastName")]
         public string LastName { get; set; }
-        [Name("middle_name")]
+
+        [Column(Name = "MiddleName")]
         public string MiddleName { get; set; }
-        [Name("city")]
+
+        [Column(Name = "City")]
         public string City { get; set; }
-        [Name("country")]
+
+        [Column(Name = "Country")]
         public string Country { get; set; }
     }
 }
