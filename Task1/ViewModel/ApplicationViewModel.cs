@@ -90,7 +90,8 @@ namespace Task1.ViewModel
 
             if (dialog.ShowDialog() == true)
             {
-                await Task.Run(() => Export.ExportToXML(dialog.FileName));
+                await Task.Delay(1000);
+                Export.ExportToXML(dialog.FileName);
             }
         }
 
@@ -101,7 +102,8 @@ namespace Task1.ViewModel
 
             if (dialog.ShowDialog() == true)
             {
-                await Task.Run(() => Export.ExportToExcel(dialog.FileName));
+                await Task.Delay(1000);
+                Export.ExportToExcel(dialog.FileName);
             }
         }
 
