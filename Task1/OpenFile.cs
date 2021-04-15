@@ -19,10 +19,12 @@ namespace Task1
     {
         public static List<People> ReadCSVFile(string path)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding win1251 = Encoding.GetEncoding(1251);
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ";", BadDataFound = null };
             try
             {
-                using var streamReader = new StreamReader(path);
+                using var streamReader = new StreamReader(path, win1251);
                 using var csv = new CsvReader(streamReader, config);
                 csv.Configuration.RegisterClassMap<PeopleClassMap>();
                 return csv.GetRecords<People>().ToList();
