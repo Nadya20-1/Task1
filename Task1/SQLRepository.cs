@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Task1
 {
@@ -33,9 +34,9 @@ namespace Task1
             return dbSet.Find(id);
         }
 
-        public void Create(People item)
+        public async void Create(People item)
         {
-            dbSet.Add(item);
+            await Task.Run(() => dbSet.Add(item));
             _context.SaveChanges();
         }
 

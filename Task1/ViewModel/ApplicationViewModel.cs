@@ -83,25 +83,25 @@ namespace Task1.ViewModel
         }
 
 
-        public static void XML()
+        public async static void XML()
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "Xml file (*.xml)|*.xml";
 
             if (dialog.ShowDialog() == true)
             {
-                Export.ExportToXML(dialog.FileName);
+                await Task.Run(() => Export.ExportToXML(dialog.FileName));
             }
         }
 
-        public static void Excel()
+        public async static void Excel()
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "Excel Files|*.xlsx;*.xls;*.xlsm";
 
             if (dialog.ShowDialog() == true)
             {
-               Export.ExportToExcel(dialog.FileName);
+                await Task.Run(() => Export.ExportToExcel(dialog.FileName));
             }
         }
 
