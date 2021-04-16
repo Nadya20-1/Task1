@@ -107,16 +107,9 @@ namespace Task1.ViewModel
             }
         }
 
-        public static void OpenCSV(string path)
+        public static async Task OpenCSVAsync(string path)
         {
-            List<People> a = OpenFile.ReadCSVFile(path)?.ToList();
-            if (a != null)
-                foreach (var item in a)
-                {
-                    SQLRepository<People> rp = new SQLRepository<People>(new PeopleContext());
-                    rp.Create(item);
-                }
-            MessageBox.Show("Data has been imported to Database!");
+            await OpenFile.ReadCSVFile(path);
         }
 
         public static void ReadCSVandSendDataToSQL()
@@ -164,9 +157,9 @@ namespace Task1.ViewModel
         {
             try
             {
-                DataTable dataTable = ToDataTable(OpenFile.ReadCSVFile(MainWindow.Instance.file_text.Text));
+                //DataTable dataTable = ToDataTable(OpenFile.ReadCSVFile(MainWindow.Instance.file_text.Text));
 
-                OpenFile.ReadCSVToDatabase(dataTable);
+                //OpenFile.ReadCSVToDatabase(dataTable);
                 MessageBox.Show("Data has been imported to Database!");
             }
             catch (Exception ex)
@@ -185,7 +178,7 @@ namespace Task1.ViewModel
 
         public static async void AsyncReadCSVandSave2DB(string path)
         {
-            await Task.Run(() => OpenCSV(path));
+            await Task.Run(() => OpenCSVAsync(path));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

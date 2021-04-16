@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -17,9 +18,8 @@ namespace Task1
 {
     public class OpenFile
     {
-        public static List<People> ReadCSVFile(string path)
+        public static async Task ReadCSVFile(string path)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Encoding win1251 = Encoding.GetEncoding(1251);
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ";", BadDataFound = null };
             try
@@ -27,14 +27,25 @@ namespace Task1
                 using var streamReader = new StreamReader(path, win1251);
                 using var csv = new CsvReader(streamReader, config);
                 csv.Configuration.RegisterClassMap<PeopleClassMap>();
-                return csv.GetRecords<People>().ToList();
+                var record = csv.GetRecords<People>();
+
+                await csv.ReadAsync();
+
+                SQLRepository<People> rp = new SQLRepository<People>(new PeopleContext());
+                while (await csv.ReadAsync())
+                {
+                    foreach (var item in record)
+                    {
+                       await rp.AddAsync(item);
+                    }
+                }
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Exception " + ex);
-                return null;
             }
+            MessageBox.Show("Data has been imported to Database!");
         }
 
         public static DataTable ReadCSV(string filePath)

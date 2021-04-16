@@ -34,10 +34,17 @@ namespace Task1
             return dbSet.Find(id);
         }
 
-        public async void Create(People item)
+        public void Create(People item)
         {
-            await Task.Run(() => dbSet.Add(item));
+            dbSet.Add(item);
             _context.SaveChanges();
+        }
+
+        public async Task<People> AddAsync(People entity)
+        {
+            dbSet.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public void Update(People item)
