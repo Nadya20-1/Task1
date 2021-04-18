@@ -19,12 +19,12 @@
                 <DataGridTextColumn Binding="{Binding Country}" Header="Country" Width="70" IsReadOnly="True" ClipboardContentBinding="{Binding}" DisplayIndex="5"/>
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox x:Name="date_text" HorizontalAlignment="Left" Margin="81,318,0,0"  Text="{Binding DateText}" TextWrapping="Wrap" Width="138" Height="23" VerticalAlignment="Top"/>
-        <TextBox x:Name="lastname_text" HorizontalAlignment="Left" Margin="81,412,0,0" Text="{Binding LastNameText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23"/>
-        <TextBox x:Name="city_text" HorizontalAlignment="Left" Margin="355,368,0,0"  Text="{Binding CityText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="22"/>
-        <TextBox x:Name="firstname_text" HorizontalAlignment="Left" Margin="81,368,0,0"  Text="{Binding FirstNameText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="22"/>
-        <TextBox x:Name="country_text" HorizontalAlignment="Left" Margin="355,412,0,0" Text="{Binding CountryText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
-        <TextBox x:Name="middlename_text" HorizontalAlignment="Left" Margin="355,318,0,0" Text="{Binding MiddleNameText}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
+        <TextBox x:Name="date_text" HorizontalAlignment="Left" Margin="81,318,0,0"  TextWrapping="Wrap" Width="138" Height="23" VerticalAlignment="Top"/>
+        <TextBox x:Name="lastname_text" HorizontalAlignment="Left" Margin="81,412,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23"/>
+        <TextBox x:Name="city_text" HorizontalAlignment="Left" Margin="355,368,0,0"   TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="22"/>
+        <TextBox x:Name="firstname_text" HorizontalAlignment="Left" Margin="81,368,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="22"/>
+        <TextBox x:Name="country_text" HorizontalAlignment="Left" Margin="355,412,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
+        <TextBox x:Name="middlename_text" HorizontalAlignment="Left" Margin="355,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
 
         <Label Content="Date" HorizontalAlignment="Left" Margin="10,317,0,0" VerticalAlignment="Top" Height="27" Width="47"/>
         <Label Content="First Name" HorizontalAlignment="Left" Margin="8,365,0,0" VerticalAlignment="Top" Height="24"/>
@@ -36,10 +36,6 @@
 
         <Button x:Name="btn_excel" Content="Export To Excel" HorizontalAlignment="Left" Margin="580,325,0,0" Command="{Binding ExportToExcel}" VerticalAlignment="Top" Width="95" Height="22"/>
         <Button x:Name="btn_xml" Content="Export To XML" HorizontalAlignment="Left" Margin="580,383,0,0" Command="{Binding ExportToXML}" VerticalAlignment="Top" Width="95" Height="22"/>
-
-
-        <!--<Button Content="Load to Database" HorizontalAlignment="Left" Margin="566,9,0,0" Command="{Binding LoadToDatabase}" VerticalAlignment="Top" Width="110"/>-->
-
-
+        
     </Grid>
 </Window>

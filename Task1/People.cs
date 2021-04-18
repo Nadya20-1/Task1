@@ -14,6 +14,8 @@ namespace Task1
         public int Id { get; set; }
 
         [Column(Name = "Date")]
+
+        [Name("Date")]
         public string Date
         {
             get
@@ -29,18 +31,23 @@ namespace Task1
         }
 
         [Column(Name = "FirstName")]
+        [Name("FirstName")]
         public string FirstName { get; set; }
 
         [Column(Name = "LastName")]
+        [Name("LastName")]
         public string LastName { get; set; }
-
+      
         [Column(Name = "MiddleName")]
+        [Name("MiddleName")]
         public string MiddleName { get; set; }
-
+    
         [Column(Name = "City")]
+        [Name("City")]
         public string City { get; set; }
-
+  
         [Column(Name = "Country")]
+        [Name("Country")]
         public string Country { get; set; }
     }
 }

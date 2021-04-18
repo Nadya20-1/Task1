@@ -10,7 +10,6 @@ namespace Task1
 {
     class SQLRepository<People> : IRepository<People> where People : class
     {
-
         public DbContext _context;
         public DbSet<People> dbSet;
 
@@ -76,6 +75,5 @@ namespace Task1
             return includeProperties
                 .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
-
     }
 }

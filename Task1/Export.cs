@@ -13,6 +13,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
@@ -21,7 +22,7 @@ namespace Task1
 {
     public class Export
     {
-        public static void ExportToExcel(string path)
+        public static async void ExportToExcel(string path)
         {
             DataTable dataTable = new DataTable();
             using (SqlConnection dbConnection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Population;Integrated Security=True;"))
@@ -59,7 +60,7 @@ namespace Task1
                         i++;
                     }
 
-                    excelApplication.ActiveWorkbook.SaveCopyAs(path);
+                    await Task.Run(() => excelApplication.ActiveWorkbook.SaveCopyAs(path));
                     excelApplication.ActiveWorkbook.Saved = true;
 
                     MessageBox.Show("Data has been exported to Excel!");
@@ -74,7 +75,7 @@ namespace Task1
                 }
         }
 
-        public static void ExportToXML(string path)
+        public static async void ExportToXML(string path)
         {
             try
             {
@@ -100,7 +101,7 @@ namespace Task1
                                       new XElement("MiddleName", item.MiddleName),
                                       new XElement("City", item.City),
                                       new XElement("Country", item.Country))));
-                    elements.Save(path);
+                    await Task.Run(() => elements.Save(path));
                     dbConnection.Close();
                 }
                 MessageBox.Show("Data has been exported to XML!");
